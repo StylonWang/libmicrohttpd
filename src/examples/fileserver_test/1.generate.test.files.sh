@@ -1,18 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 MAX_FOLDER_DEPTH=5
 FOLDER_DEPTH=$RANDOM%$MAX_FOLDER_DEPTH
 MAX_FILES_PER_FOLDER=10
 
-function create_file
+create_file ()
 {
     local file_name=$1
     local parent_folder=$2
-    local file_length=`expr $RANDOM * 100`
+    local file_length=`expr $RANDOM \* 10`
     local log_file=/tmp/$RANDOM
 
     #echo "creating $file_name with $file_length bytes..."
-    dd if=/dev/random of=$file_name bs=1 count=$file_length >$log_file 2>&1
+    dd if=/dev/urandom of=$file_name bs=1 count=$file_length >$log_file 2>&1
     if (($? != 0)); then
         echo "Failed to create file: $file_name "
         cat $log_file
@@ -20,7 +20,7 @@ function create_file
     rm $log_file
 }
 
-function populate_folder
+populate_folder ()
 {
     local cwd=$1
     local depth=`expr $2 - 1`
