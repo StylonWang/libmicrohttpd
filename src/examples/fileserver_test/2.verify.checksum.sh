@@ -8,9 +8,12 @@ if [[ ! -d $DIR ]]; then
 fi
 
 for dir in `find $1 -type d`; do
+    echo "checking $dir"
     (cd $dir; md5sum -s -c md5sum.txt)
     if (( $? != 0 )); then
         echo "MD5 checksum failure: $dir"
         exit 1
     fi
 done
+
+echo "Done"
