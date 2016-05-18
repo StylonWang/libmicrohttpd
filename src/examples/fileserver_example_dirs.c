@@ -151,8 +151,15 @@ ahc_echo(void *cls,
 //TODO:check if path falls outside current working folder, for security `reasons
 
     if (0 != strcmp(method, MHD_HTTP_METHOD_GET)) {
-                dbgprint("-\n");
-                return MHD_NO;  /* unexpected method */
+                dbgprint("- unsupported method %s\n", method);
+                response = MHD_create_response_from_buffer(strlen(PAGE),
+                                                       (void *)PAGE,
+                                                       MHD_RESPMEM_PERSISTENT);
+                ret = MHD_queue_response (connection, 
+                              MHD_HTTP_NOT_IMPLEMENTED,
+                              response);
+                MHD_destroy_response(response);
+                return ret;  /* unsupported method */
     }
     if (&aptr != *ptr) {
         /* do never respond on first call */
